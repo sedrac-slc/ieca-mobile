@@ -11,4 +11,8 @@ class HymContentBottomSheetViewModel {
   Future<Result<List<HymnsContent>>> findByHymnNumber(HymnsNumber hymnsNumber) async {
     return await _service.findByHymnNumber(hymnsNumber);
   }
+
+  Future<Result<List<HymnsContent>>> search(String search, Section section) async {
+    return await _service.search(search, section);
+  }
 }

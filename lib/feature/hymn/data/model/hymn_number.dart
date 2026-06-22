@@ -6,6 +6,7 @@ class HymnsNumber {
   final String code;
   final String label;
   final HymnsGroup hymnsGroup;
+
   const HymnsNumber({
     required this.id,
     required this.num,

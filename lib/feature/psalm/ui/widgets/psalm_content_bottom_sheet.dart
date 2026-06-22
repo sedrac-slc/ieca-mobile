@@ -29,10 +29,6 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet> {
     });
   }
 
-  String _getLabel(String person) {
-    return person == "DIRECTOR" ? "Direção" : "Congregação";
-  }
-
   @override
   Widget build(BuildContext context) {
     return ContentBottomSheet<PsalmsContent>(
@@ -56,7 +52,7 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                _getLabel(item.person),
+                StringUtil.getPersonLabel(item.person),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
