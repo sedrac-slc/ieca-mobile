@@ -3,11 +3,13 @@ import 'package:mobile/_import.dart';
 
 class ContentBottomSheet<T> extends StatelessWidget {
   final String title;
+  final List<Widget> actions;
   final Future<Result<List<T>>> future;
   final Widget Function(BuildContext context, T item, int index) itemBuilder;
 
   const ContentBottomSheet({
     super.key,
+    this.actions = const [],
     required this.title,
     required this.future,
     required this.itemBuilder,
@@ -31,11 +33,12 @@ class ContentBottomSheet<T> extends StatelessWidget {
                   child: Text(
                     title,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+                ...actions,
               ],
             ),
           ),
@@ -47,10 +50,12 @@ class ContentBottomSheet<T> extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
+
                 final result = snapshot.data;
                 if (result == null) {
                   return const Center(child: Text('Nenhum dado encontrado'));
                 }
+
                 return result.when(
                   ok: (data) {
                     if (data.isEmpty) {
