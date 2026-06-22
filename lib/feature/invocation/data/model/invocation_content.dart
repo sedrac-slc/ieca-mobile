@@ -14,4 +14,5 @@ class InvocationContent {
     required this.invocation,
     this.books,
   });
+
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:mobile/_import.dart';
 
 class NavItem {
@@ -6,10 +7,14 @@ class NavItem {
   final PreferredSizeWidget appBar;
   final NavigationDestination navigation;
 
-  NavItem({required this.screen, required this.appBar, required this.navigation});
+  NavItem({
+    required this.screen,
+    required this.appBar,
+    required this.navigation,
+  });
 }
-class PageViewModel {
 
+class PageViewModel {
   List<NavItem> get navItems => [
     NavItem(
       screen: const HomeScreen(),
@@ -36,6 +41,23 @@ class PageViewModel {
     ),
 
     NavItem(
+      screen: const HymnScreen(),
+      appBar: const PageAppBar(
+        title: "Hinos",
+        subtitle: "Encontre o seu louvor",
+      ),
+      navigation: const NavigationDestination(
+        icon: HugeIcon(
+          icon: HugeIcons.strokeRoundedMusic3,
+          color: Colors.white,
+          size: 16.0,
+          strokeWidth: 1,
+        ),
+        label: "Hino",
+      ),
+    ),
+
+    NavItem(
       screen: const LitanyScreen(),
       appBar: const PageAppBar(
         title: "Litania",
@@ -44,18 +66,6 @@ class PageViewModel {
       navigation: const NavigationDestination(
         icon: AppIcon.litany,
         label: "Litania",
-      ),
-    ),
-
-    NavItem(
-      screen: const HymnScreen(),
-      appBar: const PageAppBar(
-        title: "Hinos",
-        subtitle: "Encontre o seu louvor",
-      ),
-      navigation: const NavigationDestination(
-        icon: AppIcon.hymn,
-        label: "Hino",
       ),
     ),
 
@@ -70,6 +80,5 @@ class PageViewModel {
         label: "Salmos",
       ),
     ),
-
   ];
 }

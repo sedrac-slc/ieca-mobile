@@ -21,17 +21,21 @@ class _PsalmsScreenState extends State<PsalmsScreen> {
   @override
   Widget build(BuildContext context) {
     final section = context.watch<SectionProvider>().section;
-    return Column(
-      children: [
-        SectionFutureBuilder<PsalmsTitle>(
-          keyValue: section,
-          future: _viewModel.findBySection(section),
-          builder: (context, items) => SectionListView<PsalmsTitle>(
-            items: items,
-            itemBuilder: (context, psalm, _) => PsalmListTile(psalm: psalm),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        children: [
+          SearchInput(),
+          SectionFutureBuilder<PsalmsTitle>(
+            keyValue: section,
+            future: _viewModel.findBySection(section),
+            builder: (context, items) => SectionListView<PsalmsTitle>(
+              items: items,
+              itemBuilder: (context, psalm, _) => PsalmListTile(psalm: psalm),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

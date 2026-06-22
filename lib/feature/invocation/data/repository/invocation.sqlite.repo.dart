@@ -59,4 +59,22 @@ class InvocationSqliteRepo implements IInvocationRepo {
       return Result.error(Exception(e.toString()));
     }
   }
+
+  @override
+  Future<Result<InvocationContent>> findContentFist(InvocationTitle invocation) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_invocation_content',
+        where: 'invocation_title_id = ?',
+        whereArgs: [invocation.id],
+        orderBy: 'position ASC',
+        limit: 1,
+      );
+      if (rows.isEmpty) return Result.error(Exception('No content found'));
+      return Result.ok(InvocationContentMapper.toMapper(rows.first, invocation));
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
 }

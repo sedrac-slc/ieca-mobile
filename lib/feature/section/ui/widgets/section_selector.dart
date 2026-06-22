@@ -44,11 +44,11 @@ class _SectionSelectorState extends State<SectionSelector> {
         }
 
         return SizedBox(
-          width: 100,
+          width: 80,
           child: DropdownButtonHideUnderline(
             child: DropdownButton<int>(
               value: _selectedId,
-              hint: const Text('Seção'),
+              hint: const Text('Seção', style: TextStyle(fontSize: 15),),
               items: sections.map((section) => DropdownMenuItem(
                 value: section.id,
                 child: Text(section.name, maxLines: 1, overflow: TextOverflow.ellipsis),

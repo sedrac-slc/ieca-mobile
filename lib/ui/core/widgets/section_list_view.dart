@@ -19,7 +19,7 @@ class SectionListView<T> extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = items[index];
           return Padding(
-            padding: const EdgeInsets.all(2),
+            padding: const EdgeInsets.only(top: 2),
             child: itemBuilder(context, item, index),
           );
         },

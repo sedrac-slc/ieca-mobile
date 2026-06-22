@@ -2,131 +2,80 @@ import 'package:flutter/material.dart';
 import 'package:mobile/_import.dart';
 import 'package:provider/provider.dart';
 
-class HomeCardTotal extends StatefulWidget {
+class HomeCardTotal extends StatelessWidget {
   const HomeCardTotal({super.key});
-
-  @override
-  State<HomeCardTotal> createState() => _HomeCardTotalState();
-}
-
-class _HomeCardTotalState extends State<HomeCardTotal> {
-  final _hymnsNumberService = HymnNumberService();
-  final _invocationService = InvocationService();
-  final _litanyService = LitanyService();
-  final _psalmsService = PsalmService();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<_ItemTotal> _loadData(Section section) async {
-    final invocation = await _invocationService.countBySection(section);
-    final litany = await _litanyService.countBySection(section);
-    final hymns = await _hymnsNumberService.countBySection(section);
-    final psalms = await _psalmsService.countBySection(section);
-
-    return _ItemTotal(hymns, psalms, litany, invocation);
-  }
 
   @override
   Widget build(BuildContext context) {
     final section = context.watch<SectionProvider>().section;
-    return FutureBuilder<_ItemTotal>(
-      key: ValueKey(section),
-      future: _loadData(section),
-      builder: (context, snapshot){
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SizedBox(
-            height: 100,
-            child: Center(child: CircularProgressIndicator()),
-          );
-        }
+    return FutureBuilder(
+      future: Future.wait([
+        InvocationService().countBySection(section),
+        LitanyService().countBySection(section),
+        HymnNumberService().countBySection(section),
+        PsalmService().countBySection(section),
+      ]),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox(height: 80, child: Center(child: CircularProgressIndicator()));
 
-        final result = snapshot.data;
-        if (result == null) {
-          return const SizedBox.shrink();
-        }
+        final data = snapshot.data as List<int>;
+        final items = {'Hinos': data[2], 'Litanias': data[1], 'Salmos': data[3], 'Invocação': data[0]};
 
         return GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           crossAxisCount: 2,
-          childAspectRatio: 1.3,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          padding: const EdgeInsets.all(5),
-          children: [
-            _SummaryCard(label: 'Total Hinos', count: result.totalHymns),
-            _SummaryCard(label: 'Litanias', count: result.totalLitany),
-            _SummaryCard(label: 'Salmos', count: result.totalPsalms),
-            _SummaryCard(label: 'Invocação', count: result.totalInvocation),
-          ],
+          childAspectRatio: 2.5,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          children: items.entries.map((e) => _SummaryCard(e.key, e.value)).toList(),
         );
       },
     );
   }
 }
 
-class _ItemTotal {
-  final int totalHymns;
-  final int totalPsalms;
-  final int totalLitany;
-  final int totalInvocation;
-
-  _ItemTotal(
-    this.totalHymns,
-    this.totalPsalms,
-    this.totalLitany,
-    this.totalInvocation,
-  );
-}
-
 class _SummaryCard extends StatelessWidget {
   final String label;
   final int count;
-
-  const _SummaryCard({required this.label, required this.count, super.key});
+  const _SummaryCard(this.label, this.count);
 
   @override
   Widget build(BuildContext context) {
+    final icons = {
+      'Hinos': Icons.music_note,
+      'Litanias': Icons.description,
+      'Salmos': Icons.book,
+      'Invocação': Icons.mic
+    };
+
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.pinkAccent.withAlpha(5),
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(5),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            label.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
-              fontWeight: FontWeight.w600,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            Icon(icons[label], color: Colors.pinkAccent, size: 20),
+            const SizedBox(width: 10),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('$count', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, height: 1.0,)),
+                const SizedBox(height: 10),
+                Text(label.toUpperCase(), style: const TextStyle(fontSize: 9, color: Colors.grey, fontWeight: FontWeight.w700, height: 1.0,)),
+              ],
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '$count',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.pink,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

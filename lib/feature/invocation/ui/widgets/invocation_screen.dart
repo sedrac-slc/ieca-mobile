@@ -17,17 +17,21 @@ class _InvocationScreenState extends State<InvocationScreen> {
   @override
   Widget build(BuildContext context) {
     final section = context.watch<SectionProvider>().section;
-    return Column(
-      children: [
-        SectionFutureBuilder<InvocationTitle>(
-          keyValue: section,
-          future: _viewModel.findBySection(section),
-          builder: (context, items) => SectionListView<InvocationTitle>(
-            items: items,
-            itemBuilder: (context, invocation, _) => InvocationListTile(invocation: invocation),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        children: [
+          SearchInput(),
+          SectionFutureBuilder<InvocationTitle>(
+            keyValue: section,
+            future: _viewModel.findBySection(section),
+            builder: (context, items) => SectionListView<InvocationTitle>(
+              items: items,
+              itemBuilder: (context, invocation, _) => InvocationListTile(invocation: invocation),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

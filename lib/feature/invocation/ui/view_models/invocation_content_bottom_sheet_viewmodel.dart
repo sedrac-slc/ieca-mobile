@@ -12,4 +12,9 @@ class InvocationContentBottomSheetViewModel {
     return await _service.findContentByInvocation(invocation);
   }
 
+  Future<Result<InvocationContent>> findContentFist(InvocationTitle invocation) async {
+    return await _service.findContentFist(invocation);
+  }
+
+
 }

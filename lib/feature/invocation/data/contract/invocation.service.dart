@@ -4,6 +4,7 @@ abstract class IInvocationService {
   final IInvocationRepo repo;
 
   Future<Result<List<InvocationContent>>> findContentByInvocation(InvocationTitle invocation) => repo.findContentByInvocation(invocation);
+  Future<Result<InvocationContent>> findContentFist(InvocationTitle invocation) => repo.findContentFist(invocation);
   Future<Result<List<InvocationTitle>>> findBySection(Section section) => repo.findBySection(section);
   Future<int> countBySection(Section section) => repo.countBySection(section);
   Future<int> count() => repo.count();

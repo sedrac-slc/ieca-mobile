@@ -21,17 +21,21 @@ class _LitanyScreenState extends State<LitanyScreen> {
   @override
   Widget build(BuildContext context) {
     final section = context.watch<SectionProvider>().section;
-    return Column(
-      children: [
-        SectionFutureBuilder<LitanyTitle>(
-          keyValue: section,
-          future: _viewModel.findBySection(section),
-          builder: (context, items) => SectionListView<LitanyTitle>(
-            items: items,
-            itemBuilder: (context, litany, _) => LitanyListTile(litany: litany),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        children: [
+          SearchInput(),
+          SectionFutureBuilder<LitanyTitle>(
+            keyValue: section,
+            future: _viewModel.findBySection(section),
+            builder: (context, items) => SectionListView<LitanyTitle>(
+              items: items,
+              itemBuilder: (context, litany, _) => LitanyListTile(litany: litany),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

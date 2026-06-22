@@ -14,30 +14,39 @@ class _HymnScreenState extends State<HymnScreen> {
   @override
   Widget build(BuildContext context) {
     final section = context.watch<SectionProvider>().section;
-    return FutureBuilder<Result<List<HymnsGroup>>>(
-      key: ValueKey(section),
-      future: _viewModel.findBySection(section),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        children: [
+          SearchInput(),
+          Expanded(
+            child: FutureBuilder<Result<List<HymnsGroup>>>(
+              key: ValueKey(section),
+              future: _viewModel.findBySection(section),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-        return snapshot.data?.when(
-          ok: (data) {
-            if (data.isEmpty) return const SizedBox.shrink();
-            final children = <Widget>[];
-            for (int i = 0; i < data.length; i++) {
-              if (i > 0) children.add(const SizedBox(height: 10));
-              children.add(HymnNumberGrid(hymnsGroup: data[i]));
-            }
-            return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Column(children: children),
-            );
-          },
-          error: (error) => Center(child: Text('Erro: $error')),
-        ) ?? const SizedBox.shrink();
-      },
+                return snapshot.data?.when(
+                  ok: (data) {
+                    if (data.isEmpty) return const SizedBox.shrink();
+                    final children = <Widget>[];
+                    for (int i = 0; i < data.length; i++) {
+                      if (i > 0) children.add(const SizedBox(height: 10));
+                      children.add(HymnNumberGrid(hymnsGroup: data[i]));
+                    }
+                    return SingleChildScrollView(
+                      child: Column(children: children),
+                    );
+                  },
+                  error: (error) => Center(child: Text('Erro: $error')),
+                ) ?? const SizedBox.shrink();
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
