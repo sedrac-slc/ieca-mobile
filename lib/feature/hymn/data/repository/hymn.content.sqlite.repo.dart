@@ -40,6 +40,7 @@ class HymnContentSqliteRepo implements IHymnContentRepo {
       INNER JOIN tb_hymns_number n ON c.hymns_number_id = n.id
       INNER JOIN tb_hymns_group g ON n.hymns_group_id = g.id
       WHERE c.content LIKE ? AND g.section_id = ?
+      GROUP BY c.hymns_number_id
       ORDER BY c.position ASC
     ''',
         ['%$search%', section.id],

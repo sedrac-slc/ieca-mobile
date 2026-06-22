@@ -13,9 +13,8 @@ class InvocationContentBottomSheet extends StatefulWidget {
   State<InvocationContentBottomSheet> createState() => _InvocationContentBottomSheetState();
 }
 
-class _InvocationContentBottomSheetState extends State<InvocationContentBottomSheet> {
+class _InvocationContentBottomSheetState extends State<InvocationContentBottomSheet> with FontSizeAdjustment {
   late final InvocationContentBottomSheetViewModel _viewModel;
-  double _fontSize = 16.0;
 
   @override
   void initState() {
@@ -23,27 +22,12 @@ class _InvocationContentBottomSheetState extends State<InvocationContentBottomSh
     _viewModel = InvocationContentBottomSheetViewModel();
   }
 
-  void _adjustFontSize(double delta) {
-    setState(() {
-      _fontSize = (_fontSize + delta).clamp(12.0, 24.0);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return ContentBottomSheet<InvocationContent>(
       title: widget.invocation.name,
       future: _viewModel.findContentByInvocation(widget.invocation),
-      actions: [
-        IconButton(
-          onPressed: () => _adjustFontSize(-2),
-          icon: const Text("A-", style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-        IconButton(
-          onPressed: () => _adjustFontSize(2),
-          icon: const Text("A+", style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-      ],
+      actions: fontActions,
       itemBuilder: (context, item, index) {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -54,7 +38,7 @@ class _InvocationContentBottomSheetState extends State<InvocationContentBottomSh
                 Text(
                   item.books!,
                   style: TextStyle(
-                    fontSize: _fontSize * 0.8,
+                    fontSize: currentFontSize * 0.8,
                     color: Colors.grey[600],
                     fontStyle: FontStyle.italic,
                   ),
@@ -64,7 +48,7 @@ class _InvocationContentBottomSheetState extends State<InvocationContentBottomSh
                 item.content,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  fontSize: _fontSize,
+                  fontSize: currentFontSize,
                   height: 1.6,
                 ),
               ),

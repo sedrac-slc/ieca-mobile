@@ -13,9 +13,9 @@ class PsalmContentBottomSheet extends StatefulWidget {
   State<PsalmContentBottomSheet> createState() => _PsalmContentBottomSheetState();
 }
 
-class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet> {
+class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet>
+    with FontSizeAdjustment {
   late final PsalmContentBottomSheetViewModel _viewModel;
-  double _fontSize = 16.0;
 
   @override
   void initState() {
@@ -23,27 +23,12 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet> {
     _viewModel = PsalmContentBottomSheetViewModel();
   }
 
-  void _adjustFontSize(double delta) {
-    setState(() {
-      _fontSize = (_fontSize + delta).clamp(12.0, 24.0);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return ContentBottomSheet<PsalmsContent>(
       title: widget.psalm.name,
       future: _viewModel.findContentByPsalmsTitle(widget.psalm),
-      actions: [
-        IconButton(
-          onPressed: () => _adjustFontSize(-2),
-          icon: const Text("A-", style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-        IconButton(
-          onPressed: () => _adjustFontSize(2),
-          icon: const Text("A+", style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-      ],
+      actions: fontActions,
       itemBuilder: (context, item, index) {
         final isCongregation = item.person != "DIRECTOR";
         return Padding(
@@ -65,7 +50,7 @@ class _PsalmContentBottomSheetState extends State<PsalmContentBottomSheet> {
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: isCongregation ? FontWeight.w800 : FontWeight.normal,
-                  fontSize: _fontSize,
+                  fontSize: currentFontSize,
                   height: 1.6,
                 ),
               ),

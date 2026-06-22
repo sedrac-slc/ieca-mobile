@@ -26,6 +26,7 @@ class _HymnScreenState extends State<HymnScreen> {
     } else {
       _tab.value = _HymnTab.SEARCH;
       _searchResults = _viewModel.search(value, section);
+      setState(() {});
     }
   }
 
@@ -40,7 +41,10 @@ class _HymnScreenState extends State<HymnScreen> {
         builder: (context, value, child) {
           return Column(
             children: [
-              SearchInput(controller: _search, onChanged: (v) => _onSearchChanged(v, section)),
+              SearchInput(
+                controller: _search,
+                onChanged: (v) => _onSearchChanged(v, section),
+              ),
               if (value == _HymnTab.LIST) ...[
                 Expanded(
                   child: FutureBuilder<Result<List<HymnsGroup>>>(
@@ -55,14 +59,19 @@ class _HymnScreenState extends State<HymnScreen> {
                               if (data.isEmpty) return const SizedBox.shrink();
                               final children = <Widget>[];
                               for (int i = 0; i < data.length; i++) {
-                                if (i > 0) children.add(const SizedBox(height: 10));
-                                children.add(HymnNumberGrid(hymnsGroup: data[i]));
+                                if (i > 0) {
+                                  children.add(const SizedBox(height: 10));
+                                }
+                                children.add(
+                                  HymnNumberGrid(hymnsGroup: data[i]),
+                                );
                               }
                               return SingleChildScrollView(
                                 child: Column(children: children),
                               );
                             },
-                            error: (error) => Center(child: Text('Erro: $error')),
+                            error: (error) =>
+                                Center(child: Text('Erro: $error')),
                           ) ??
                           const SizedBox.shrink();
                     },
@@ -70,40 +79,65 @@ class _HymnScreenState extends State<HymnScreen> {
                 ),
               ] else ...[
                 Expanded(
-                    child: FutureBuilder<Result<List<HymnsContent>>>(
-                      future: _searchResults,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
+                  child: FutureBuilder<Result<List<HymnsContent>>>(
+                    future: _searchResults,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                        final result = snapshot.data;
-                        return result?.when(
-                          ok: (data) {
-                            if (data.isEmpty) return const Center(child: Text("Nenhum hino encontrado."));
-                            return ListView.builder(
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                final item = data[index];
-                                return ListTile(
-                                  title: Text("${item.hymnsNumber.num} - ${item.hymnsNumber.label}"),
-                                  subtitle: Text(item.content, maxLines: 2, overflow: TextOverflow.ellipsis),
-                                  onTap: () {
-
-                                  },
+                      final result = snapshot.data;
+                      return result?.when(
+                            ok: (data) {
+                              if (data.isEmpty) {
+                                return const Center(
+                                  child: Text("Nenhum hino encontrado."),
                                 );
-                              },
-                            );
-                          },
-                          error: (e) => Center(child: Text('Erro: $e')),
-                        ) ?? const SizedBox.shrink();
-                      },
-                    )
+                              }
+                              return ListView.builder(
+                                itemCount: data.length,
+                                itemBuilder: (context, index) {
+                                  final item = data[index];
+                                  return ListTile(
+                                    title: Text(
+                                      "${item.hymnsNumber.num} - ${item.hymnsNumber.label}",
+                                    ),
+                                    subtitle: Text(
+                                      StringUtil.replaceContent(item.content),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        useSafeArea: true,
+                                        constraints: BoxConstraints(
+                                          maxWidth: double.infinity,
+                                          maxHeight: MediaQuery.of(
+                                            context,
+                                          ).size.height,
+                                        ),
+                                        builder: (context) =>
+                                            HymnContentBottomSheet(
+                                              hymnNumber: item.hymnsNumber,
+                                            ),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            error: (e) => Center(child: Text('Erro: $e')),
+                          ) ??
+                          const SizedBox.shrink();
+                    },
+                  ),
                 ),
               ],
             ],
           );
-        }
+        },
       ),
     );
   }

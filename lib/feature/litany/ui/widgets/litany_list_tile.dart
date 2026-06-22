@@ -16,6 +16,7 @@ class _LitanyListTileState extends State<LitanyListTile> {
 
   Future<void> _init() async {
     final result = await _viewModel.findContentFist(widget.litany);
+    if (!mounted) return;
     _content.value = result.when(
       ok: (value) => value,
       error: (_) => LitanyContentMapper.empty(),

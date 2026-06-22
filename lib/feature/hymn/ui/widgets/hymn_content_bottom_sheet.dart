@@ -85,7 +85,7 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
             itemBuilder: (context, index) {
               final item = items[index];
               final isChoir = item.typeStanza == HymnContentTypeStanza.CHOIR;
-              final content = item.content.replaceAll('\\n', '\n');
+              final content = StringUtil.replaceContent(item.content);
 
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

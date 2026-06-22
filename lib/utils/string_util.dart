@@ -5,6 +5,10 @@ final class StringUtil {
     return content.length <= AppVariable.len ? content : '${content.substring(0, AppVariable.len)} ...';
   }
 
+  static String replaceContent(String content) {
+    return content.replaceAll('\\n', '\n');
+  }
+
   static String getPersonLabel(String person) {
     if(person == "DIRECTOR") return "Direção";
     if(person == "CONGREGATION") return "Congregação";

@@ -16,6 +16,7 @@ class _InvocationListTileState extends State<InvocationListTile> {
 
   Future<void> _init() async {
     final result = await _viewModel.findContentFist(widget.invocation);
+    if (!mounted) return;
     _content.value = result.when(
       ok: (value) => value,
       error: (_) => InvocationContentMapper.empty(),

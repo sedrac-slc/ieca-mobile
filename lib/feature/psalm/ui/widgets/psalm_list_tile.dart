@@ -16,6 +16,7 @@ class _PsalmListTileState extends State<PsalmListTile> {
 
   Future<void> _init() async {
     final result = await _viewModel.findContentFist(widget.psalm);
+    if (!mounted) return;
     _content.value = result.when(
       ok: (value) => value,
       error: (_) => PsalmsContentMapper.empty(),

@@ -13,9 +13,9 @@ class LitanyContentBottomSheet extends StatefulWidget {
   State<LitanyContentBottomSheet> createState() => _LitanyContentBottomSheetState();
 }
 
-class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet> {
+class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet>
+    with FontSizeAdjustment {
   late final LitanyContentBottomSheetViewModel _viewModel;
-  double _fontSize = 16.0;
 
   @override
   void initState() {
@@ -23,27 +23,12 @@ class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet> {
     _viewModel = LitanyContentBottomSheetViewModel();
   }
 
-  void _adjustFontSize(double delta) {
-    setState(() {
-      _fontSize = (_fontSize + delta).clamp(12.0, 24.0);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return ContentBottomSheet<LitanyContent>(
       title: widget.litany.name,
       future: _viewModel.findContentByLitanyTitle(widget.litany),
-      actions: [
-        IconButton(
-          onPressed: () => _adjustFontSize(-2),
-          icon: const Text("A-", style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-        IconButton(
-          onPressed: () => _adjustFontSize(2),
-          icon: const Text("A+", style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-      ],
+      actions: fontActions,
       itemBuilder: (context, item, index) {
         final isCongregation = item.person != "DIRECTOR";
 
@@ -65,7 +50,7 @@ class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet> {
                 Text(
                   item.books!,
                   style: TextStyle(
-                    fontSize: _fontSize * 0.8,
+                    fontSize: currentFontSize * 0.8,
                     color: Colors.grey[600],
                     fontStyle: FontStyle.italic,
                   ),
@@ -76,7 +61,7 @@ class _LitanyContentBottomSheetState extends State<LitanyContentBottomSheet> {
                 item.content,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  fontSize: _fontSize,
+                  fontSize: currentFontSize,
                   height: 1.6,
                   fontWeight: isCongregation ? FontWeight.w600 : FontWeight.normal,
                 ),
