@@ -60,4 +60,20 @@ class LitanySqliteRepo implements ILitanyRepo {
       return Result.error(Exception(e.toString()));
     }
   }
+
+  @override
+  Future<Result<LitanyContent>> findContentFist(LitanyTitle litanyTitle) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_litany_content',
+        where: 'litany_title_id = ?',
+        whereArgs: [litanyTitle.id],
+      );
+      if (rows.isEmpty) return Result.error(Exception('No content found'));
+      return Result.ok(LitanyContentMapper.toMapper(rows.first, litanyTitle));
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
 }

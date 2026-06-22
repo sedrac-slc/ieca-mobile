@@ -10,4 +10,8 @@ class LitanyContentBottomSheetViewModel {
   Future<Result<List<LitanyContent>>> findContentByLitanyTitle(LitanyTitle litanyTitle) async {
     return await _service.findContentByLitanyTitle(litanyTitle);
   }
+
+  Future<Result<LitanyContent>> findContentFist(LitanyTitle litanyTitle) async {
+    return await _service.findContentFist(litanyTitle);
+  }
 }

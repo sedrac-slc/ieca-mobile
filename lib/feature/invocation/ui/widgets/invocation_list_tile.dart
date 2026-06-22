@@ -38,10 +38,10 @@ class _InvocationListTileState extends State<InvocationListTile> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<InvocationContent>(
       valueListenable: _content,
-      builder: (context, content, _) => PageListTile(
+      builder: (context, value, _) => PageListTile(
         number: widget.invocation.position,
         title: widget.invocation.name,
-        subtitle: StringUtil.short(content.content),
+        subtitle: StringUtil.short(value.content),
         onPressed: () {
           showModalBottomSheet(
             context: context,
