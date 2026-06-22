@@ -59,4 +59,21 @@ class PsalmSqliteRepo implements IPsalmRepo {
       return Result.error(Exception(e.toString()));
     }
   }
+
+  @override
+  Future<Result<PsalmsContent>> findContentFist(PsalmsTitle psalmsTitle) async {
+    try {
+      final db = await openAppDatabase();
+      final rows = await db.query(
+        'tb_psalms_content',
+        where: 'psalms_title_id = ?',
+        whereArgs: [psalmsTitle.id],
+        orderBy: 'position ASC',
+      );
+      if (rows.isEmpty) return Result.error(Exception('No content found'));
+      return Result.ok(PsalmsContentMapper.toMapper(rows.first, psalmsTitle));
+    } catch (e) {
+      return Result.error(Exception(e.toString()));
+    }
+  }
 }

@@ -10,4 +10,8 @@ class PsalmContentBottomSheetViewModel {
   Future<Result<List<PsalmsContent>>> findContentByPsalmsTitle(PsalmsTitle psalmsTitle) async {
     return await _service.findContentByPsalmsTitle(psalmsTitle);
   }
+
+  Future<Result<PsalmsContent>> findContentFist(PsalmsTitle psalmsTitle) async {
+    return await _service.findContentFist(psalmsTitle);
+  }
 }
