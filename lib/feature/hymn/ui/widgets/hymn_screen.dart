@@ -14,11 +14,16 @@ class HymnScreen extends StatefulWidget {
 }
 
 class _HymnScreenState extends State<HymnScreen> {
-  final HymnScreenViewmodel _viewModel = HymnScreenViewmodel();
-
   final ValueNotifier<String> _tab = ValueNotifier(_HymnTab.LIST);
   final TextEditingController _search = TextEditingController();
+  final HymnScreenViewmodel _viewModel = HymnScreenViewmodel();
   Future<Result<List<HymnsContent>>>? _searchResults;
+
+  void _onSearchRest() {
+    _searchResults = Future.value(Result.ok([]));
+    _search.clear();
+    _tab.value = _HymnTab.LIST;
+  }
 
   void _onSearchChanged(String value, Section section) {
     if (value.isEmpty) {
@@ -43,6 +48,7 @@ class _HymnScreenState extends State<HymnScreen> {
             children: [
               SearchInput(
                 controller: _search,
+                onReset: _onSearchRest,
                 onChanged: (v) => _onSearchChanged(v, section),
               ),
               if (value == _HymnTab.LIST) ...[

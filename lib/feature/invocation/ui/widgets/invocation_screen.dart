@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/_import.dart';
 import 'package:provider/provider.dart';
+
 class InvocationScreen extends StatefulWidget {
   const InvocationScreen({super.key});
   @override
@@ -18,10 +19,9 @@ class _InvocationScreenState extends State<InvocationScreen> {
   Widget build(BuildContext context) {
     final section = context.watch<SectionProvider>().section;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: AppPadding.container,
       child: Column(
         children: [
-          SearchInput(),
           SectionFutureBuilder<InvocationTitle>(
             keyValue: section,
             future: _viewModel.findBySection(section),

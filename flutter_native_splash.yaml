@@ -1,0 +1,11 @@
+flutter_native_splash:
+  color: "#fc6665"
+  image: "assets/img/ieca_1152.png"
+  android: true
+  ios: true
+
+  android_12:
+    image: "assets/img/ieca_960.png"
+    icon_background_color: "#fc6665"
+    image_dark: "assets/img/ieca_960.png"
+    icon_background_color_dark: "#fc6665"

@@ -22,7 +22,6 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
-      leading: leading ?? const PageSetting(),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

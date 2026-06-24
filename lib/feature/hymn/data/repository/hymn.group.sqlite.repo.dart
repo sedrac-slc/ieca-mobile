@@ -7,8 +7,8 @@ class HymnGroupSqliteRepo implements IHymnGroupRepo {
       final db = await openAppDatabase();
       final rows = await db.query(
         'tb_hymns_group',
-        where: 'section_id = ?',
-        whereArgs: [section.id],
+        where: 'section_id = ? AND type = ?',
+        whereArgs: [section.id, HymnNumberType.NORMAL],
         orderBy: 'id ASC',
       );
       final groups = rows.map((row) => HymnGroupMapper.toMapper(row, section)).toList();

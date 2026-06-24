@@ -1,11 +1,14 @@
 import 'package:mobile/_import.dart';
 
 class HymnNumberSqliteRepo implements IHymnNumberRepo {
+
   @override
   Future<int> count() async {
     try {
       final db = await openAppDatabase();
-      final result = await db.rawQuery('SELECT COUNT(*) as cnt FROM tb_hymns_number');
+      final result = await db.rawQuery('SELECT COUNT(*) as cnt FROM tb_hymns_number WHERE type = ?',
+          [HymnNumberType.NORMAL]
+      );
       return (result.first['cnt'] as int?) ?? 0;
     } catch (e) {
       return 0;
@@ -17,10 +20,11 @@ class HymnNumberSqliteRepo implements IHymnNumberRepo {
     try {
       final db = await openAppDatabase();
       final result = await db.rawQuery(
-        'SELECT COUNT(*) as cnt FROM tb_hymns_number hn '
-        'INNER JOIN tb_hymns_group hg ON hn.hymns_group_id = hg.id '
-        'WHERE hg.section_id = ?',
-        [section.id],
+        '''SELECT COUNT(*) as cnt 
+           FROM tb_hymns_number hn 
+           INNER JOIN tb_hymns_group hg ON hn.hymns_group_id = hg.id 
+           WHERE hg.section_id = ? AND hn.type = ?''',
+        [section.id, HymnNumberType.NORMAL],
       );
       return (result.first['cnt'] as int?) ?? 0;
     } catch (e) {
@@ -32,12 +36,14 @@ class HymnNumberSqliteRepo implements IHymnNumberRepo {
   Future<Result<List<HymnsNumber>>> findByHymnsGroup(HymnsGroup hymnsGroup) async {
     try {
       final db = await openAppDatabase();
+
       final rows = await db.query(
         'tb_hymns_number',
-        where: 'hymns_group_id = ?',
-        whereArgs: [hymnsGroup.id],
+        where: 'hymns_group_id = ? AND type = ?',
+        whereArgs: [hymnsGroup.id, HymnNumberType.NORMAL],
         orderBy: 'num ASC',
       );
+
       final list = rows.map((row) => HymnNumberMapper.toMapper(row, hymnsGroup)).toList();
       return Result.ok(list);
     } catch (e) {

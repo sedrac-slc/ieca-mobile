@@ -22,10 +22,9 @@ class _LitanyScreenState extends State<LitanyScreen> {
   Widget build(BuildContext context) {
     final section = context.watch<SectionProvider>().section;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: AppPadding.container,
       child: Column(
         children: [
-          SearchInput(),
           SectionFutureBuilder<LitanyTitle>(
             keyValue: section,
             future: _viewModel.findBySection(section),

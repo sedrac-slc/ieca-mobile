@@ -22,10 +22,9 @@ class _PsalmsScreenState extends State<PsalmsScreen> {
   Widget build(BuildContext context) {
     final section = context.watch<SectionProvider>().section;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: AppPadding.container,
       child: Column(
         children: [
-          SearchInput(),
           SectionFutureBuilder<PsalmsTitle>(
             keyValue: section,
             future: _viewModel.findBySection(section),

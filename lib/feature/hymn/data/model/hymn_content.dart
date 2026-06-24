@@ -5,7 +5,6 @@ final class HymnContentTypeStanza {
   static const String CHOIR = 'CHOIR';
 }
 
-
 class HymnsContent {
   final int id;
   final int position;

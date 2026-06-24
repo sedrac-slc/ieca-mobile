@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 class SearchInput extends StatelessWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
+  final Function()? onReset;
   final String? hintText;
 
-  const SearchInput({super.key, this.controller, this.onChanged, this.hintText});
+  const SearchInput({super.key, this.onReset, this.controller, this.onChanged, this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +19,12 @@ class SearchInput extends StatelessWidget {
           hintText: hintText ?? 'Procurar...',
           hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
           prefixIcon: Icon(Icons.search, color: Color(0xFFD81B60)),
+          suffixIcon: (controller?.text.isNotEmpty ?? false)
+              ? IconButton(
+            icon: const Icon(Icons.clear, color: Colors.grey),
+            onPressed: onReset,
+          )
+              : null,
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(vertical: 12),

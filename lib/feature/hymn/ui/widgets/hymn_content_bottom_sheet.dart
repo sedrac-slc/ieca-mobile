@@ -28,105 +28,96 @@ class _HymnContentBottomSheetState extends State<HymnContentBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 100,
-        leading: Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            Expanded(
-              child: Text(
-                widget.hymnNumber.num.toString(),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+    return SafeArea(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
-                overflow: TextOverflow.ellipsis,
-              ),
+                Text(
+                  widget.hymnNumber.num.toString(),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.text_decrease),
+                  onPressed: () => _adjustFontSize(false),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.text_increase),
+                  onPressed: () => _adjustFontSize(true),
+                ),
+              ],
             ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.text_decrease),
-            onPressed: () => _adjustFontSize(false),
           ),
-          IconButton(
-            icon: const Icon(Icons.text_increase),
-            onPressed: () => _adjustFontSize(true),
-          ),
-          IconButton(icon: const Icon(Icons.share), onPressed: () {}),
-          IconButton(icon: const Icon(Icons.favorite_border), onPressed: () {}),
-        ],
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-      ),
-      body: SectionFutureBuilder<HymnsContent>(
-        keyValue: widget.hymnNumber,
-        future: _viewModel.findByHymnNumber(widget.hymnNumber),
-        builder: (context, items) {
-          int count = 0;
-          final List<String> labels = items.map((item) {
-            if (item.typeStanza != HymnContentTypeStanza.CHOIR) count++;
-            return item.typeStanza == HymnContentTypeStanza.CHOIR
-                ? 'REFRÃO'
-                : 'VERSO $count';
-          }).toList();
+          const Divider(height: 1),
+          Expanded(
+            child: SectionFutureBuilder<HymnsContent>(
+              keyValue: widget.hymnNumber,
+              future: _viewModel.findByHymnNumber(widget.hymnNumber),
+              builder: (context, items) {
+                int count = 0;
+                final List<String> labels = items.map((item) {
+                  if (item.typeStanza != HymnContentTypeStanza.CHOIR) count++;
+                  return item.typeStanza == HymnContentTypeStanza.CHOIR
+                      ? 'REFRÃO'
+                      : 'VERSO $count';
+                }).toList();
 
-          return ListView.separated(
-            padding: const EdgeInsets.all(24),
-            itemCount: items.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 32),
-            itemBuilder: (context, index) {
-              final item = items[index];
-              final isChoir = item.typeStanza == HymnContentTypeStanza.CHOIR;
-              final content = StringUtil.replaceContent(item.content);
+                return ListView.separated(
+                  padding: const EdgeInsets.all(24),
+                  itemCount: items.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 32),
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    final isChoir = item.typeStanza == HymnContentTypeStanza.CHOIR;
+                    final content = StringUtil.replaceContent(item.content);
 
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      labels[index],
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        color: pink,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Container(
-                      width: double.infinity,
-                      decoration: isChoir
-                          ? BoxDecoration(
-                        color: const Color(0xFFFFF3F8),
-                        borderRadius: BorderRadius.circular(20),
-                      )
-                          : null,
-                      child: Text(
-                        content,
-                        style: TextStyle(
-                          fontSize: _fontSize,
-                          height: 1.6,
-                          color: isChoir ? pink : Colors.black87,
-                          fontWeight: isChoir ? FontWeight.w600 : FontWeight.normal,
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          labels[index],
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: pink,
+                            letterSpacing: 1.2,
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
+                        const SizedBox(height: 12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          width: double.infinity,
+                          decoration: isChoir
+                              ? BoxDecoration(
+                            color: const Color(0xFFFFF3F8),
+                            borderRadius: BorderRadius.circular(12),
+                          )
+                              : null,
+                          child: Text(
+                            content,
+                            style: TextStyle(
+                              fontSize: _fontSize,
+                              height: 1.6,
+                              color: isChoir ? pink : Colors.black87,
+                              fontWeight: isChoir ? FontWeight.w600 : FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
