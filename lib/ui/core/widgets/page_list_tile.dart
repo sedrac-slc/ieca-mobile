@@ -20,59 +20,62 @@ class PageListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     const primaryColor = Color(0xFFE61E62);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade200),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        leading: Container(
-          width: 30,
-          height: 30,
-          decoration: BoxDecoration(
-            color: primaryColor.withAlpha(30),
-            shape: BoxShape.circle,
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade200),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          leading: Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: primaryColor.withAlpha(30),
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              "$number",
+              style: const TextStyle(
+                color: primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
           ),
-          alignment: Alignment.center,
-          child: Text(
-            "$number",
+
+          title: Text(
+            title,
             style: const TextStyle(
-              color: primaryColor,
+              color: Color(0xFF1A1A1A),
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-        ),
 
-        title: Text(
-          title,
-          style: const TextStyle(
-            color: Color(0xFF1A1A1A),
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-
-        subtitle: subtitle == null
-            ? null
-            : Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  subtitle!,
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.8,
-                    fontSize: 11,
+          subtitle: subtitle == null
+              ? null
+              : Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Text(
+                    subtitle!,
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.8,
+                      fontSize: 11,
+                    ),
                   ),
                 ),
-              ),
 
-        trailing: InkWell(onTap: onPressed, child: AppIcon.arrowRight),
+          trailing: AppIcon.arrowRight,
+        ),
       ),
     );
   }
